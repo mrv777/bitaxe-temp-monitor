@@ -1,5 +1,5 @@
-from gui import BitaxeGammaAutotuningApp
+from gui import BitaxeGammaautotuningApp
 
 if __name__ == "__main__":
-    app = BitaxeGammaAutotuningApp()
+    app = BitaxeGammaautotuningApp()
     app.run()

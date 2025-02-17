@@ -1,0 +1,14 @@
+{
+    "Bitaxe Model": "Bitaxe Ultra",
+    "board_version": 204,
+    "voltage_step": 10,
+    "frequency_step": 5,
+    "min_allowed_voltage": 1000,
+    "max_allowed_voltage": 1300,
+    "min_allowed_frequency": 400,
+    "max_allowed_frequency": 800,
+    "default_target_temp": 45,
+    "temp_tolerance": 2,
+    "power_limit": 25,
+    "monitor_interval": 5
+}

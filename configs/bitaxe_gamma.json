@@ -1,4 +1,6 @@
 {
+    "Bitaxe Model": "Bitaxe Gamma",
+    "board_version": 601,
     "voltage_step": 10,
     "frequency_step": 5,
     "min_allowed_voltage": 1000,

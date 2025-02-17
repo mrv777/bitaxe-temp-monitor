@@ -27,6 +27,7 @@ def get_system_info(bitaxe_ip):
         response = requests.get(f"http://{bitaxe_ip}/api/system/info", timeout=10)
         response.raise_for_status()
         return response.json()
+
     except requests.exceptions.RequestException as e:
         return f"Error fetching system info from {bitaxe_ip}: {e}"
 
@@ -99,25 +100,11 @@ def monitor_and_adjust(bitaxe_ip, voltage, frequency, target_temp, interval, pow
 
         else:
             log_callback(f"{bitaxe_ip} -> Stable. No adjustment needed.", "success")
-            #-----------------------
-        # if temp > target_temp or power_consumption > power_limit:
-        #     log_callback(f"{bitaxe_ip} -> Adjusting settings due to high temp/power!", "warning")
-        #     if current_frequency - FREQUENCY_STEP >= MIN_ALLOWED_FREQUENCY:
-        #         current_frequency -= FREQUENCY_STEP
-        #     elif current_voltage - VOLTAGE_STEP >= MIN_ALLOWED_VOLTAGE:
-        #         current_voltage -= VOLTAGE_STEP
-
-        # elif temp < (target_temp - TEMP_TOLERANCE):
-        #     log_callback(f"{bitaxe_ip} -> Trying to optimize performance.", "info")
-        #     if current_frequency + FREQUENCY_STEP <= MAX_ALLOWED_FREQUENCY:
-        #         current_frequency += FREQUENCY_STEP
-        #     elif current_voltage + VOLTAGE_STEP <= MAX_ALLOWED_VOLTAGE:
-        #         current_voltage += VOLTAGE_STEP
 
         log_callback(set_system_settings(bitaxe_ip, current_voltage, current_frequency), "info")
         time.sleep(interval)
 
-    log_callback(f"{bitaxe_ip} -> Autotuning stopped.", "warning")
+    log_callback(f"{bitaxe_ip} -> autotuning stopped.", "warning")
 
 def stop_autotuning():
     """Stops all autotuning threads."""

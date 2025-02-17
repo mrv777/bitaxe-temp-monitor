@@ -1,10 +1,10 @@
-# Bitaxe Temperature Monitor and Auto-Tuner
+# Bitaxe Temperature Monitor and autotuner
 
 This project contains a Python script that continuously monitors a Bitaxe Gamma 601 Bitcoin solo miner's operating temperature and automatically adjusts its operating frequency (and voltage if necessary) to achieve optimal hash rate without overheating the device.
 
 ## Overview
 
-The Bitaxe Gamma Autotuner and Auto-Tuner script continuously polls the Bitaxe's `/api/system/info` endpoint to read current temperature, hash rate, and voltage. Based on a configurable target temperature (default is 60°C) and a defined temperature margin, the script automatically adjusts:
+The Bitaxe Gamma autotuner and autotuner script continuously polls the Bitaxe's `/api/system/info` endpoint to read current temperature, hash rate, and voltage. Based on a configurable target temperature (default is 60°C) and a defined temperature margin, the script automatically adjusts:
 
 - **Frequency**: Decreases frequency if the temperature exceeds the target or increases if the temperature is well below the target.
 - **Voltage**: If frequency adjustments alone are insufficient or if the settings are at their limits, voltage is also adjusted within safe operating ranges.
@@ -41,12 +41,12 @@ The script aims to maximize the device's hash rate while preventing overheating,
 Run the script by providing the IP address of your Bitaxe. You can also specify initial voltage, frequency, target temperature, and autotuning interval.
 
 ```bash
-python3 bitaxe-temp-auto-tuner.py <bitaxeIp> [options]
+python3 bitaxe-temp-autotuner.py <bitaxe_ip> [options]
 ```
 
 ### Command-Line Options
 
-- `<bitaxeIp>`: IP address of the Bitaxe (e.g., `192.168.2.26`)
+- `<bitaxe_ip>`: IP address of the Bitaxe (e.g., `192.168.2.26`)
 - `-v, --voltage`: Initial core voltage in mV (default: 1150)
 - `-f, --frequency`: Initial frequency in MHz (default: 600)
 - `-t, --target_temp`: Target CPU temperature in °C (default: 60)
@@ -56,7 +56,7 @@ python3 bitaxe-temp-auto-tuner.py <bitaxeIp> [options]
 #### Example
 
 ```bash
-python3 bitaxe-temp-auto-tuner.py 192.168.2.26 -v 1150 -f 500 -t 60 -i 5 -p 30
+python3 bitaxe-temp-autotuner.py 192.168.2.26 -v 1150 -f 500 -t 60 -i 5 -p 30
 ```
 
 ## How It Works
