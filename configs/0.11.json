@@ -1,6 +1,6 @@
 {
     "bitaxe_model": "Bitaxe Ultra",
-    "board_version": 204,
+    "board_version": 0.11,
     "voltage_step": 10,
     "frequency_step": 5,
     "min_allowed_voltage": 1000,
@@ -13,6 +13,6 @@
     "custom_starting_frequency": null,
     "custom_starting_voltage": null,
     "temp_tolerance": 2,
-    "power_limit": 30,
+    "power_limit": 20,
     "monitor_interval": 5
 }

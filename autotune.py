@@ -6,12 +6,13 @@ from config import load_config
 running = True
 
 # Get information from the Bitaxe
-def get_bitaxe_board_version(bitaxe_ip):
+def get_bitaxe_board_version(bitaxe_ip, log_callback):
     """Fetch the Bitaxe board version from the miner's API"""
     try:
         response = requests.get(f"http://{bitaxe_ip}/api/system/info", timeout=10)
         response.raise_for_status()
         data = response.json()
+        log_callback(f"{bitaxe_ip} -> {data.get("boardVersion")}", "success")
         return data.get("boardVersion", "unknown")  # Get board version or return 'unknown'
     except requests.exceptions.RequestException as e:
         return f"Error fetching system info from {bitaxe_ip}: {e}"
@@ -45,7 +46,7 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
     """Monitor and auto-adjust miner settings for a specific Bitaxe miner."""
     
     #Detect the board version for this specific miner
-    board_version = get_bitaxe_board_version(bitaxe_ip)
+    board_version = get_bitaxe_board_version(bitaxe_ip, log_callback)
     
     config = load_config(board_version)
 
@@ -64,7 +65,7 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
     DEFAULT_VOLTAGE = config["default_voltage"]
     CUSTOM_STARTING_FREQUENCY = config["custom_starting_frequency"]
     CUSTOM_STARTING_VOLTAGE = config["custom_starting_voltage"]
-    TEMP_TOLERANCE = config["temp_tolerance"] #;alskdgp[aowh]
+    TEMP_TOLERANCE = config["temp_tolerance"]
     POWER_LIMIT = config["power_limit"]
 
     log_callback(f"{bitaxe_ip} -> Using {board_version} config: Voltage [{MIN_ALLOWED_VOLTAGE}-{MAX_ALLOWED_VOLTAGE}]mV, Frequency [{MIN_ALLOWED_FREQUENCY}-{MAX_ALLOWED_FREQUENCY}]MHz, Target Temperature [{DEFAULT_TARGET_TEMP}]", "success")
@@ -79,6 +80,8 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
         new_voltage = DEFAULT_VOLTAGE
     else:
         new_voltage = CUSTOM_STARTING_VOLTAGE
+
+    set_system_settings(bitaxe_ip, new_voltage, new_frequency)
 
     while running:
         info = get_system_info(bitaxe_ip)
