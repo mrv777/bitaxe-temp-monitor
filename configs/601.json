@@ -1,5 +1,5 @@
 {
-    "bitax_model": "Bitaxe Gamma",
+    "bitaxe_model": "Bitaxe Gamma",
     "board_version": 601,
     "voltage_step": 10,
     "frequency_step": 5,

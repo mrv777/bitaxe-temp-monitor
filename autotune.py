@@ -143,8 +143,7 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
         elif hash_rate < 1600:
             log_callback(f"{bitaxe_ip} -> Hashrate underperforming! Adjusting voltage.", "warning")
             if current_voltage + VOLTAGE_STEP <= MAX_ALLOWED_VOLTAGE:
-                current_voltage += VOLTAGE_STEP  # TRY BOOSTING VOLTAGE TO IMPROVE STABILITY
-                set_system_settings(bitaxe_ip, current_voltage, current_frequency)
+                new_voltage += VOLTAGE_STEP  # TRY BOOSTING VOLTAGE TO IMPROVE STABILITY
             else:
                 log_callback(f"{bitaxe_ip} -> Voltage maxed, keeping current settings.", "warning")
 
