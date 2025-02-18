@@ -10,9 +10,9 @@
     "default_target_temp": 50,
     "default_frequency": 525,
     "default_voltage": 1150,
-    "custom_starting_frequency": 650,
+    "custom_starting_frequency": 760,
     "custom_starting_voltage": 1200,
     "temp_tolerance": 2,
-    "power_limit": 25,
+    "power_limit": 45,
     "monitor_interval": 5
 }

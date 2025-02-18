@@ -4,15 +4,15 @@
     "voltage_step": 10,
     "frequency_step": 5,
     "min_allowed_voltage": 1000,
-    "max_allowed_voltage": 1300,
+    "max_allowed_voltage": 1350,
     "min_allowed_frequency": 400,
     "max_allowed_frequency": 800,
     "default_target_temp": 40,
     "default_frequency": 485,
     "default_voltage": 1200,
-    "custom_starting_frequency": 575,
+    "custom_starting_frequency": 525,
     "custom_starting_voltage": 1250,
     "temp_tolerance": 2,
-    "power_limit": 20,
+    "power_limit": 30,
     "monitor_interval": 5
 }

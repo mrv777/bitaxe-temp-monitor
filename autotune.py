@@ -105,7 +105,7 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
         # Adjust settings based on conditions
         # **STEP-DOWN LOGIC (Protection First)**
         if temp is None or power_consumption > POWER_LIMIT or temp > DEFAULT_TARGET_TEMP:
-            log_callback(f"{bitaxe_ip} -> Overheating or Power Limit Exceeded! Lowering settings.", "error")
+            log_callback(f"{bitaxe_ip} -> Overheating ({temp}°C) or Power Limit of {round(POWER_LIMIT)}W Exceeded! {round(power_consumption,2)}W. Lowering settings.", "error")
             
             # Reduce voltage first (to lower power consumption)
             if current_voltage - VOLTAGE_STEP >= MIN_ALLOWED_VOLTAGE:
@@ -122,7 +122,7 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
                 log_callback(f"{bitaxe_ip} -> Minimum settings reached! Holding state.", "error")
 
         # **STEP-UP LOGIC (Performance Tuning)**
-        elif temp < (DEFAULT_TARGET_TEMP - 3) and power_consumption < (POWER_LIMIT * 0.9):
+        elif temp < (DEFAULT_TARGET_TEMP - 1) and power_consumption < POWER_LIMIT: #*0.9
             log_callback(f"{bitaxe_ip} -> Temp {temp}°C is low. Trying to optimize.", "warning")
 
             # Ensure voltage is not stuck at low values
@@ -139,20 +139,20 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
             else:
                 log_callback(f"{bitaxe_ip} -> Already at maximum safe settings.", "info")
 
-        # **HASHRATE RECOVERY (Fine-Tuning Stability)**
-        elif hash_rate < 1600:
-            log_callback(f"{bitaxe_ip} -> Hashrate underperforming! Adjusting voltage.", "warning")
-            if current_voltage + VOLTAGE_STEP <= MAX_ALLOWED_VOLTAGE:
-                new_voltage += VOLTAGE_STEP  # TRY BOOSTING VOLTAGE TO IMPROVE STABILITY
-            else:
-                log_callback(f"{bitaxe_ip} -> Voltage maxed, keeping current settings.", "warning")
+        # # **HASHRATE RECOVERY (Fine-Tuning Stability)** THIS IS THE WEEKNESS RIGHT NOW, HARD TO ATTEMPA CHANGE HERE
+        # elif hash_rate < 1600:
+        #     log_callback(f"{bitaxe_ip} -> Hashrate underperforming! Adjusting voltage.", "warning")
+        #     if current_voltage + VOLTAGE_STEP <= MAX_ALLOWED_VOLTAGE:
+        #         new_voltage += VOLTAGE_STEP  # TRY BOOSTING VOLTAGE TO IMPROVE STABILITY
+        #     else:
+        #         log_callback(f"{bitaxe_ip} -> Voltage maxed, keeping current settings.", "warning")
 
         else:
             log_callback(f"{bitaxe_ip} -> Stable. No adjustment needed.", "success")
         
         # **Apply settings only if changed**
         if new_voltage != current_voltage or new_frequency != current_frequency:
-            applied_settings = set_system_settings(bitaxe_ip, new_voltage, new_frequency)
+            set_system_settings(bitaxe_ip, new_voltage, new_frequency)
             current_voltage, current_frequency = new_voltage, new_frequency
 
         log_callback(set_system_settings(bitaxe_ip, current_voltage, current_frequency), "info")
