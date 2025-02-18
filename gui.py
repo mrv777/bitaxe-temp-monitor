@@ -14,7 +14,7 @@ class BitaxeGammaautotuningApp:
         # IP Address Entry
         tk.Label(self.root, text="Enter IPs (comma-separated):").grid(row=0, column=0)
         self.ip_entry = tk.Entry(self.root, width=50)
-        self.ip_entry.insert(0, "192.168.0.101")
+        self.ip_entry.insert(0, "192.168.0.101,192.168.0.107")
         self.ip_entry.grid(row=0, column=1, columnspan=2)
 
         # # Voltage Entry
@@ -55,7 +55,7 @@ class BitaxeGammaautotuningApp:
         self.stop_button.grid(row=4, column=2, columnspan=2)
 
         # Log Output
-        self.log_output = scrolledtext.ScrolledText(self.root, width=100, height=20)
+        self.log_output = scrolledtext.ScrolledText(self.root, width=120, height=20)
         self.log_output.grid(row=5, column=0, columnspan=4)
 
     def log_message(self, message, level="info"):
@@ -72,7 +72,7 @@ class BitaxeGammaautotuningApp:
         self.threads.clear()
 
         ip_addresses = self.ip_entry.get().split(",")
-        ip_addresses = [ip.strip() for ip in ip_addresses if ip.stripl()] #trimming IP's??
+        ip_addresses = [ip.strip() for ip in ip_addresses if ip.strip()] # clean whitespace
 
         if not ip_addresses:
             self.log_message("Enter at least one IP.","error")
@@ -80,18 +80,20 @@ class BitaxeGammaautotuningApp:
         
         self.log_message(f"Starting autotuning for {len(ip_addresses)} miners...", "success")
 
-        # voltage, frequency = int(self.voltage_entry.get()), int(self.frequency_entry.get())
-        # target_temp, interval = int(self.target_temp_entry.get()), int(self.interval_entry.get())
-        # power_limit = int(self.power_limit_entry.get())
         interval = int(self.interval_entry.get())
-
-        self.log_message(f"Starting autotuning for: {', '.join(ip_addresses)}", "success")
 
         for ip in ip_addresses:
             self.autotuning_status[ip] = True
-            thread = threading.Thread(target=monitor_and_adjust, args=(ip, interval, self.log_message))
+            self.log_message(f"Starting autotuning for: {ip}", "info")
+            thread = threading.Thread(target=self.autotune_single_ip,args=(ip, interval))
+            # thread = threading.Thread(target=monitor_and_adjust, args=(ip, interval, self.log_message))
             thread.start()
             self.threads.append(thread)
+
+    def autotune_single_ip(self, ip, interval):
+        """Runs auto-tuning for a single miner IP"""
+        self.log_message(f"Detecting model for {ip}...","info")
+        monitor_and_adjust(ip, interval, self.log_message)
 
     def stop_autotuning(self):
         """Stops autotuning miners."""
