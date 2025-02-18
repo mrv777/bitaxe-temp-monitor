@@ -12,7 +12,7 @@ def get_bitaxe_board_version(bitaxe_ip, log_callback):
         response = requests.get(f"http://{bitaxe_ip}/api/system/info", timeout=10)
         response.raise_for_status()
         data = response.json()
-        log_callback(f"{bitaxe_ip} -> {data.get("boardVersion")}", "success")
+        log_callback(f"{bitaxe_ip} -> {data.get('boardVersion')}", "success")
         return data.get("boardVersion", "unknown")  # Get board version or return 'unknown'
     except requests.exceptions.RequestException as e:
         return f"Error fetching system info from {bitaxe_ip}: {e}"
@@ -50,7 +50,7 @@ def monitor_and_adjust(bitaxe_ip, interval, log_callback):
     
     config = load_config(board_version)
 
-    log_callback(f"Detected {bitaxe_ip} as {config.get("bitaxe_model","")} ({board_version})", "info")
+    log_callback(f"Detected {bitaxe_ip} as {config.get('bitaxe_model', '')} ({board_version})", "info")
 
     log_callback(f"Starting autotuning for {bitaxe_ip}", "success")
 
